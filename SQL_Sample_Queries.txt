@@ -1,0 +1,75 @@
+-- Find the titles of all books by Pratchett that cost less than $10 
+SELECT B.Title
+    FROM BOOK B, AUTHOR A, BOOK_AUTHOR BA
+    WHERE A.AuthorLname = 'Pratchett' AND A.AuthorID = BA.Author AND 
+    B.ISBN = BA.ISBN AND B.Price < 10;
+
+-- Give all the titles and their dates of purchase made by a single customer */
+SELECT B.Title, O.CompletionDate, C.FName, C.LName
+    FROM BOOK B, ORDERS O, ORDER_BOOKS OB, CUSTOMER C
+    WHERE C.CustomerID = 8 AND O.CustID = C.CustomerID AND 
+    OB.OrderNo = O.OrderNo AND OB.ISBN = B.ISBN;
+
+-- Find the titles and ISBNs for all books with less than 5 copies in stock */
+SELECT B.Title, B.ISBN, SB.QuantityInStock, S.Name AS StoreName 
+    FROM BOOK B,STORE S, STORE_BOOKS SB
+    WHERE B.ISBN = SB.ISBN AND S.StoreID = SB.StoreID AND SB.QuantityInStock < 5;
+
+--  Give all the customers who purchased a book by Pratchett and the titles of Pratchett books they purchased */
+SELECT C.FName, C.LName, B.Title
+    FROM CUSTOMER C, AUTHOR A, BOOK B, BOOK_AUTHOR AB, ORDERS O, ORDER_BOOKS OB
+    WHERE O.OrderNo = C.CustomerID AND O.OrderNo = OB.OrderNo AND 
+    B.ISBN = OB.ISBN AND A.AuthorLname = 'Pratchett' AND A.AuthorID = AB.Author AND
+    B.ISBN = AB.ISBN;
+
+-- Find the total number of books purchased by a single customer */
+SELECT C.FName, C.LName, SUM(OB.QuantityPurchased)
+    FROM CUSTOMER C, ORDERS O, ORDER_BOOKS OB
+    WHERE O.CustID = C.CustomerID AND O.OrderNo = OB.OrderNo AND C.CustomerID = 12;
+
+-- Find the customer who has purchased the most books and the total number of books they have purchased */
+	SELECT FName, LName, MAX(BooksPurchased)
+        FROM (
+        SELECT C.FName, C.LName, SUM(OB.QuantityPurchased) AS BooksPurchased
+        FROM CUSTOMER C, ORDERS O, ORDER_BOOKS OB
+        WHERE O.CustID = C.CustomerID AND O.OrderNo = OB.OrderNo
+        GROUP BY C.CustomerID);
+
+-- Retrieve the IDs of all warehouses with a total number of stored books greater than average */
+SELECT W1.ID as WarehouseID, SUM(WB1.QuantityInStock) AS BookStock
+    FROM WAREHOUSE W1, WAREHOUSE_BOOKS WB1
+    WHERE W1.ID = WB1.WarehouseID
+    GROUP BY W1.ID
+    HAVING SUM(WB1.QuantityInStock) > (
+    SELECT AVG(NumBooks)
+    FROM(
+        SELECT W.ID, SUM(WB.QuantityInStock) AS NumBooks
+        FROM WAREHOUSE W, WAREHOUSE_BOOKS WB
+        WHERE W.ID = WB.WarehouseID
+        GROUP BY W.ID
+        )
+    );
+
+-- Retrieve the title of all books with an author who has the last name 'King' */
+SELECT B.Title, A.AuthorFName, A.AuthorLNAme
+    FROM BOOK B, AUTHOR A, BOOK_AUTHOR AB
+    WHERE A.AuthorLname = 'King' AND B.ISBN = AB.ISBN AND A.AuthorID = AB.Author;
+
+-- Retrieve the list of stores that have more than 20 copies of ‘MySQL’ and how many copies the store has */
+SELECT S.Name as Store, SB.QuantityInStock
+    FROM STORE S, BOOK B, STORE_BOOKS SB
+    WHERE B.Title = 'MySQL' AND S.StoreID = SB.StoreID AND B.ISBN = SB.ISBN AND
+    SB.QuantityInStock > 20;
+
+-- Provide a list of customer names, along with the total dollar amount each customer has spent */
+SELECT FName, LName, Total
+    FROM Customer_Overall_Total;
+
+-- Provide a list of customer names and e-mail addresses for customers who have spent more than the average customer */
+SELECT C.FName, C.LName, C.Email, COT.Total
+    FROM CUSTOMER C, Customer_Overall_Total AS COT
+    WHERE C.CustomerID = COT.CustomerID
+    HAVING AVG(COT.Total) > (
+        SELECT AVG(Total)
+        FROM Customer_Overall_Total
+    );
