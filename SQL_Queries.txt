@@ -1,0 +1,110 @@
+1. Insert into Book
+INSERT INTO PUBLISHER(
+	Name
+)
+VALUES (
+	‘McGraw-Hill’
+	);
+
+INSERT INTO BOOK(
+	1234567890,
+	A Good Book,
+	McGraw-Hill,
+	2003,
+	9.99
+)
+VALUES (
+	‘Sample_ISBN’,
+	‘Sample_Title’,
+	‘Sample_Publisher’,
+	‘Sample_Year’,
+	‘Sample_Price’
+);
+
+2. Insert into Author
+INSERT INTO AUTHOR (
+    AuthorFname,
+    AuthorMname,
+    AuthorLname,
+    AuthorID
+    )
+    VALUES (
+        'John',
+        'Henry',
+        'Smith',
+        '1234567890'
+    );
+
+3. Insert into Publisher
+INSERT INTO PUBLISHER(
+	Name
+);
+VALUES (
+	‘McGraw-Hill’
+	);
+
+4. Insert into Customer
+INSERT INTO CUSTOMER (
+    FName,
+    LName,
+    Birthdate,
+    Email,
+    Phone,
+    Address,
+    CustomerID
+    )
+    VALUES (
+        'Sarah',
+        'Johns',
+        '01/25/2000',
+        'SarahJohns@Gmail.com',
+        '614-153-6272',
+        '235 Place Drive Columbus, OH 43004',
+        '1234567890'
+    );
+
+5. Delete from Book
+DELETE FROM STORE_BOOKS
+    WHERE ISBN = '1234567890';
+
+DELETE FROM WAREHOUSE_BOOKS
+    WHERE ISBN = '1234567890';
+
+DELETE FROM SUPPLY_ORDER_BOOKS
+    WHERE ISBN = '1234567890';
+
+DELETE FROM WAREHOUSE_ORDER_BOOKS
+    WHERE ISBN = '1234567890';
+
+DELETE FROM ORDER_BOOKS
+    WHERE ISBN = '1234567890';
+
+DELETE FROM BOOK
+    WHERE ISBN = '1234567890';
+
+6. Delete from Publisher
+DELETE FROM BOOK
+    WHERE Publisher = ‘Sybex’;
+
+DELETE FROM PUBLISHER
+    WHERE Name = ‘Sybex’;
+
+7. Delete from Author
+DELETE FROM AUTHOR
+    WHERE AuthorID = '1234567890';
+
+8. Delete from CustomerDELETE FROM ORDER_BOOKS
+WHERE OrderNo = SELECT OrderNO
+	FROM  [ORDER]
+		WHERE CustID = ‘1234567890’;
+
+DELETE FROM ORDER_BOOKMARKS
+WHERE OrderNo = SELECT OrderNO
+	FROM  [ORDER]
+		WHERE CustID = ‘1234567890’;
+
+DELETE FROM [ORDER]
+WHERE CustID = '1234567890';
+
+DELETE FROM CUSTOMER
+WHERE CustomerID = '1234567890';
